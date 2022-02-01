@@ -18,4 +18,8 @@ spring:
     username: admin
     password: admin
     virtual-host: "/"
-
+#app:
+#  async:
+#    withDLQRetry: true
+#    retryDelay: 1000
+#    maxRetries: 1

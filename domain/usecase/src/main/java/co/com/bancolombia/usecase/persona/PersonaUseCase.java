@@ -1,6 +1,6 @@
 package co.com.bancolombia.usecase.persona;
 
-import co.com.bancolombia.model.persona.Persona;
+import co.com.bancolombia.model.persona.Person;
 import co.com.bancolombia.model.persona.Response;
 import co.com.bancolombia.model.persona.gateways.PersonaRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +13,11 @@ public class PersonaUseCase {
 
     private final PersonaRepository personaRepository;
 
-    public Mono<Response> encolarMensaje(Persona persona){
+    public Mono<Response> encolarMensaje(Person persona){
         log.info(":: Execute PersonaUseCase encolarMensaje ::");
         return Mono.just(persona)
                 .doOnNext(persona1 -> log.info("Llegada desde handler: " + persona1))
                 .flatMap(persona1 -> personaRepository.encolarPersona(persona1.toBuilder().build()))
-                .doOnNext(unused -> log.info(unused.toString()))
                 .flatMap(unused -> Mono.just(
                         Response
                                 .builder()
