@@ -4,6 +4,7 @@ import co.com.bancolombia.api.dto.PersonaDto;
 import co.com.bancolombia.api.dto.ResponseDto;
 import co.com.bancolombia.model.persona.Person;
 import co.com.bancolombia.model.persona.Response;
+import co.com.bancolombia.usecase.parametrization.ParametrizationUseCase;
 import co.com.bancolombia.usecase.persona.PersonaUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 public class Handler {
 
     private final PersonaUseCase personaUseCase;
+    private final ParametrizationUseCase parametrizationUseCase;
     private final ObjectMapper mapper;
 
     public Mono<ServerResponse> handlerPersona(ServerRequest serverRequest) {
@@ -38,5 +40,16 @@ public class Handler {
         return ServerResponse
                 .ok()
                 .body(Mono.just(response), ResponseDto.class);
+    }
+
+    public Mono<ServerResponse> handlerParametrization(ServerRequest serverRequest) {
+        return Mono.just(serverRequest)
+                .filter(serverRequest1 -> serverRequest1.queryParam("id").isPresent())
+                .filter(serverRequest1 -> serverRequest1.queryParam("role").isPresent())
+                .flatMap(serverRequest1 -> parametrizationUseCase.execute(
+                        serverRequest1.queryParam("id").get(),
+                        serverRequest1.queryParam("role").get())
+                )
+                .then(ServerResponse.ok().body(Mono.just("Hola mundo"), String.class));
     }
 }

@@ -1,4 +1,3 @@
-##Spring Configuration
 server:
   port: 8080
 spring:
@@ -18,8 +17,8 @@ spring:
     username: admin
     password: admin
     virtual-host: "/"
-#app:
-#  async:
-#    withDLQRetry: true
-#    retryDelay: 1000
-#    maxRetries: 1
+app:
+  async:
+    withDLQRetry: true
+    retryDelay: 1000
+    maxRetries: 1
